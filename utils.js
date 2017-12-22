@@ -58,6 +58,9 @@ const into = (to, xf, collection) => {
 
   } else if (isPlainObject(to)) {
     return transduce(xf, objectReducer, to, collection);
+
+  } else if (collection["@@transducer/step"]) {
+
   }
 
   throw new Error("into only supports arrays and objects as `to`");

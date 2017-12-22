@@ -1,4 +1,5 @@
 const { List, fromJS } = require("immutable");
+const { isPlainObject } = require("lodash");
 const {
   into, seq, filter, map, compose,
   doubleTheNumber, evenOnly
@@ -10,5 +11,5 @@ const doubleAndEven = compose(
 );
 
 console.log(
-  into([], doubleAndEven, List([1,2,3,4]))
+  fromJS(into([], doubleAndEven, List([1,2,3,4])))
 );
