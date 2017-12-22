@@ -20,5 +20,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "immutable": "^3.8.2",
+    "lodash": "^4.17.4"
+  }
 }
