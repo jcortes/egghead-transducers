@@ -59,8 +59,11 @@ const into = (to, xf, collection) => {
   } else if (isPlainObject(to)) {
     return transduce(xf, objectReducer, to, collection);
 
-  } else if (collection["@@transducer/step"]) {
-
+  } else if (to["@@transducer/step"]) {
+    const init = to["@@transducer/init"]
+      ? to["@@transducer/init"]()
+      : to.constructor();
+    return transduce(xf, to["@@transducer/step"], init, collection);
   }
 
   throw new Error("into only supports arrays and objects as `to`");
@@ -72,12 +75,26 @@ const seq = (xf, collection) => {
 
   } else if (isPlainObject(collection)) {
     return transduce(xf, objectReducer, {}, collection);
+
+  } else if (collection["@@transducer/step"]) {
+    const init = collection["@@transducer/init"]
+      ? collection["@@transducer/init"]()
+      : collection.constructor();
+    return transduce(xf, collection["@@transducer/step"], init, collection);
   }
 
   throw new Error("unsupported collection type");
 };
 
-const addsSingleValue = x => x;
+const arrayofRandoms = randomCeil => length =>
+  Array.from({ length }, (v, i) =>
+    Math.floor(Math.random() * randomCeil));
+
+const timeIt = (label, fn) => {
+  console.time(label);
+  fn();
+  console.timeEnd(label);
+};
 
 module.exports = {
   compose,
@@ -91,8 +108,9 @@ module.exports = {
   evenOnly,
   map,
   filter,
-  addsSingleValue,
   into,
   transduce,
-  seq
+  seq,
+  arrayofRandoms,
+  timeIt
 };
